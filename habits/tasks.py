@@ -9,13 +9,14 @@ def send_message_to_user():
     """
     Отправка напоминания
     """
-    habits = Habit.objects.filter(pleasant_habit=False)
-
+    habits = Habit.objects.select_related('owner').filter(pleasant_habit=False)
     now_day = datetime.now().isoweekday()
 
     for habit in habits:
-
         if now_day in week_days(habit.frequency):
             if habit.owner.telegram_id:
-                message = f"У вас сегодня выполнение привычки: {habit.action}, которую нужно выполнить в {habit.time} в {habit.place}"
+                message = (
+                    f"У вас сегодня выполнение привычки: {habit.action}, "
+                    f"которую нужно выполнить в {habit.time} в {habit.place}"
+                )
                 send_tg_message(message=message, chat_id=habit.owner.telegram_id)
