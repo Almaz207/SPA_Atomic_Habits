@@ -21,10 +21,6 @@ class MyHabitListAPIView(ListAPIView):
 
     pagination_class = CustomPagination
 
-    def get_queryset(self):
-        user = self.request.user
-        return Habit.objects.filter(owner=user)
-
 
 class PublicHabitListAPIView(ListAPIView):
     queryset = Habit.objects.filter(publicity="True")
@@ -32,7 +28,6 @@ class PublicHabitListAPIView(ListAPIView):
     permission_classes = (IsAuthenticated,)
 
     pagination_class = CustomPagination
-
 
 
 class HabitCreateAPIView(CreateAPIView):
